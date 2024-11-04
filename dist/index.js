@@ -5,13 +5,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/index.ts
 const express_1 = __importDefault(require("express"));
-const route_1 = __importDefault(require("./route/route"));
-require("./db/connection"); // Ensure the database connection is established
+const body_parser_1 = __importDefault(require("body-parser"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const path_1 = __importDefault(require("path"));
+dotenv_1.default.config();
 const app = (0, express_1.default)();
-const PORT = 3000;
-app.use(express_1.default.json());
-app.use('/api', route_1.default); // Use a base URL for your API
-// Start the server
+const PORT = process.env.PORT || 3000;
+app.use(body_parser_1.default.json());
+app.use('/api', userRoutes_1.default);
+app.use('/uploads', express_1.default.static(path_1.default.join(__dirname, '../uploads')));
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });

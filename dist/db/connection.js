@@ -5,21 +5,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // src/db/connection.ts
 const mysql_1 = __importDefault(require("mysql"));
-// Create a connection to the database
+const dotenv_1 = __importDefault(require("dotenv"));
+// Load environment variables from .env file
+dotenv_1.default.config();
 const db = mysql_1.default.createConnection({
-    host: '127.0.0.1', // Use 'localhost' for local database
-    port: 3306, // MySQL default port
-    user: 'root', // MySQL root user
-    password: '', // Your MySQL root password (if any)
-    database: 'laravel' // The name of your database
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT), // Convert to number
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
 });
-// Connect to the database
 db.connect((err) => {
     if (err) {
-        console.error('Error connecting to the database:', err.stack);
+        console.error('Error connecting to the database:', err);
         return;
     }
-    console.log('Connected to the database as ID', db.threadId);
+    console.log('Connected to MySQL database.');
 });
-// Export the db for use in other files
 exports.default = db;
