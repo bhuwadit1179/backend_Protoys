@@ -9,9 +9,54 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editProfile = exports.uploadProfilePicture = exports.updateUserRoleController = exports.registerUserController = void 0;
+exports.editProfile = exports.uploadProfilePicture = exports.updateUserRoleController = exports.registerUserController = exports.getUserController = exports.getProfileController = void 0;
 const userService_1 = require("../services/userService");
 const userQueries_1 = require("../db/queries/userQueries");
+//Get User 
+const getProfileController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    // Access user ID directly from `req.user`
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.user_id;
+    if (userId === undefined) {
+        res.status(400).json({ message: 'User ID not found in request.' });
+        return;
+    }
+    try {
+        const user = yield (0, userQueries_1.getUserById)(userId);
+        res.status(200).json({ user });
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+        else {
+            res.status(500).json({ message: 'An unknown error occurred.' });
+        }
+    }
+});
+exports.getProfileController = getProfileController;
+const getUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userIdParam = req.params.user_id;
+    const userId = userIdParam ? parseInt(userIdParam, 10) : undefined;
+    if (userId) {
+        const user = yield (0, userQueries_1.getUserById)(userId);
+        res.status(200).json({ user });
+    }
+    try {
+        const user = yield (0, userQueries_1.getUser)();
+        res.status(200).json({ user });
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        }
+        else {
+            res.status(500).json({ message: 'An unknown error occurred.' });
+        }
+    }
+    ;
+});
+exports.getUserController = getUserController;
 //Register 
 const registerUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

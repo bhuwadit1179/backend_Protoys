@@ -1,11 +1,29 @@
 // src/db/queries/userQueries.ts
 import connection from '../connection';
 import { User } from '../model/userModel';
+export const getUser = (): Promise<User | null> => {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM users';
+        connection.query(query, (error, results) => {
+            if (error) return reject(error);
+            resolve(results || null);
+        });
+    });
+};
 
 export const getUserByEmail = (email: string): Promise<User | null> => {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM users WHERE email = ?';
         connection.query(query, [email], (error, results) => {
+            if (error) return reject(error);
+            resolve(results[0] || null);
+        });
+    });
+};
+export const getUserById = (user_id: number): Promise<User | null> => {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM users WHERE user_id = ?';
+        connection.query(query, [user_id], (error, results) => {
             if (error) return reject(error);
             resolve(results[0] || null);
         });
@@ -22,7 +40,7 @@ export const insertUser = (userData: User): Promise<void> => {
             role = "user",
             citizen_id,
             phone_number,
-            address_line1,
+            address,
             city,
             state,
             postal_code,
@@ -32,14 +50,14 @@ export const insertUser = (userData: User): Promise<void> => {
 
         const query = `
             INSERT INTO users (
-                fname, lname, email, password, role, citizen_id, phone_number, address_line1,
+                fname, lname, email, password, role, citizen_id, phone_number, address,
                 city, state, postal_code, country, company_id
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         connection.query(query, [
             fname, lname, email, password, role,
-            citizen_id || null, phone_number || null, address_line1 || null,
+            citizen_id || null, phone_number || null, address || null,
             city || null, state || null, postal_code || null,
             country || null, company_id || null
         ], (error) => {

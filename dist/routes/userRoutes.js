@@ -13,6 +13,8 @@ const router = express_1.default.Router();
 router.post('/login', authcontoller_1.loginController);
 router.post('/logout', authmiddleware_1.authMiddleware, authcontoller_1.logoutController); // Logout is protected by authMiddleware
 //User Routes
+router.get('/user/:user_id?', authmiddleware_1.authMiddleware, userController_1.getUserController);
+router.get('/profile', authmiddleware_1.authMiddleware, userController_1.getProfileController); //get profile
 router.post('/register', userController_1.registerUserController); //register
 router.put('/user/:user_id/role', authmiddleware_1.authMiddleware, userController_1.updateUserRoleController); //update role
 router.post('/user/:user_id/profile-picture', authmiddleware_1.authMiddleware, multerconfig_1.upload.single('profile_pictures'), userController_2.uploadProfilePicture); // upload profile picture

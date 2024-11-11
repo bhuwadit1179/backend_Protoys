@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.insertEvent = exports.getCompanybyFilter = void 0;
+exports.insertCompany = exports.getCompanybyFilter = void 0;
 const connection_1 = __importDefault(require("../connection"));
 const getCompanybyFilter = (filters = {}) => {
     return new Promise((resolve, rejects) => {
@@ -23,9 +23,9 @@ const getCompanybyFilter = (filters = {}) => {
     });
 };
 exports.getCompanybyFilter = getCompanybyFilter;
-const insertEvent = (companyData) => {
+const insertCompany = (companyData) => {
     return new Promise((resolve, reject) => {
-        const { name, email, phone_number, address, city, state, postal_code, country, website_url, contact_person, } = companyData;
+        const { name, email, phone_number, address, city, state, postal_code, country, website_url, } = companyData;
     });
 };
-exports.insertEvent = insertEvent;
+exports.insertCompany = insertCompany;

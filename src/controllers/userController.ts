@@ -2,7 +2,47 @@
 import { Request, Response } from 'express';
 import { registerUser, changeUserRole, } from '../services/userService';
 import { upload } from '../middleware/multerconfig';
-import { updateUserprofile, updateUserProfilePicture } from '../db/queries/userQueries';
+import { getUser, getUserById, updateUserprofile, updateUserProfilePicture } from '../db/queries/userQueries';
+
+//Get User 
+export const getProfileController = async (req: Request, res: Response) => {
+    // Access user ID directly from `req.user`
+    const userId = req.user?.user_id;
+    if (userId === undefined) {
+        res.status(400).json({ message: 'User ID not found in request.' });
+        return
+    }
+    try {
+        const user = await getUserById(userId);
+        res.status(200).json({ user });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: 'An unknown error occurred.' });
+        }
+    }
+};
+export const getUserController = async (req: Request, res: Response) => {
+    const userIdParam = req.params.user_id;
+    const userId = userIdParam ? parseInt(userIdParam, 10) : undefined;
+
+    if (userId) {
+        const user = await getUserById(userId);
+        res.status(200).json({ user });
+
+    } try {
+        const user = await getUser();
+        res.status(200).json({ user });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: 'An unknown error occurred.' });
+        }
+
+    };
+}
 
 //Register 
 export const registerUserController = async (req: Request, res: Response) => {

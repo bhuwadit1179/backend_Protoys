@@ -9,7 +9,7 @@ export interface User {
     role: string;
     citizen_id?: string;       // Optional if nullable in the database
     phone_number?: string;     // Optional if nullable in the database
-    address_line1?: string;    // Optional if nullable in the database
+    address?: string;    // Optional if nullable in the database
     city?: string;
     state?: string;
     postal_code?: string;

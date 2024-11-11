@@ -1,10 +1,7 @@
 // // src/route/route.ts
 // import express from 'express';
 // import {
-//     getAllEvents,
-//     createEvent,
-//     updateEvent,
-//     deleteEvent
+//     getAllEventsController
 // } from '../controllers/eventController';
 
 // const router = express.Router();
