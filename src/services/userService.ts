@@ -1,6 +1,6 @@
 // src/services/userService.ts
 import bcrypt from 'bcryptjs';
-import { getUserByEmail, insertUser, updateUserRoleById } from '../db/queries/userQueries';
+import { getUserByEmail, insertUser, updateUserRoleById, getUserById } from '../db/queries/userQueries';
 import { User } from '../db/model/userModel';
 
 export const registerUser = async (userData: User): Promise<string> => {
@@ -33,7 +33,9 @@ export const authenticateUser = async (email: string, password: string): Promise
     return isPasswordValid ? user : null;
 };
 
-export const getProfile = async () => {
+import { Request, Response } from 'express';
+
+export const getProfile = async (req: Request, res: Response): Promise<void> => {
     // Access user ID directly from `req.user`
     const userId = req.user?.user_id;
 

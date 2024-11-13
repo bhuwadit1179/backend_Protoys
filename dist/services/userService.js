@@ -54,7 +54,7 @@ const authenticateUser = (email, password) => __awaiter(void 0, void 0, void 0, 
     return isPasswordValid ? user : null;
 });
 exports.authenticateUser = authenticateUser;
-const getProfile = () => __awaiter(void 0, void 0, void 0, function* () {
+const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     // Access user ID directly from `req.user`
     const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.user_id;
@@ -63,7 +63,7 @@ const getProfile = () => __awaiter(void 0, void 0, void 0, function* () {
         return;
     }
     try {
-        const user = yield getUserById(userId);
+        const user = yield (0, userQueries_1.getUserById)(userId);
         res.status(200).json({ user });
     }
     catch (error) {
