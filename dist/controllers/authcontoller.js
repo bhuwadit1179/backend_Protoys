@@ -25,7 +25,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             return;
         }
         // Generate a JWT token
-        const token = jsonwebtoken_1.default.sign({ user_id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jsonwebtoken_1.default.sign({ user_id: user.user_id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
         // Send the token in the response
         res.status(200).json({ token });
     }
