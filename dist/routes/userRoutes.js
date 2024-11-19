@@ -18,5 +18,5 @@ router.get('/profile', authmiddleware_1.authMiddleware, userController_1.getProf
 router.post('/register', userController_1.registerUserController); //register
 router.put('/user/:user_id/role', authmiddleware_1.authMiddleware, userController_1.updateUserRoleController); //update role
 router.post('/user/:user_id/profile-picture', authmiddleware_1.authMiddleware, multerconfig_1.upload.single('profile_pictures'), userController_2.uploadProfilePicture); // upload profile picture
-router.put('/user/:user_id/profile', authmiddleware_1.authMiddleware, userController_1.editProfile); //edit profile
+router.put('/user/editprofile/:user_id', authmiddleware_1.authMiddleware, userController_1.editProfile); //edit profile
 exports.default = router;

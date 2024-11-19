@@ -3,9 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserprofile = exports.updateUserProfilePicture = exports.updateUserRoleById = exports.insertUser = exports.getUserById = exports.getUserByEmail = exports.getUser = void 0;
+exports.updateUserProfile = exports.updateUserProfilePicture = exports.updateUserRoleById = exports.insertUser = exports.getUserById = exports.getUserByEmail = exports.getUser = void 0;
 // src/db/queries/userQueries.ts
 const connection_1 = __importDefault(require("../connection"));
+const date_fns_1 = require("date-fns");
 const getUser = () => {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM users';
@@ -87,29 +88,46 @@ const updateUserProfilePicture = (userId, profilePictureUrl) => {
     });
 };
 exports.updateUserProfilePicture = updateUserProfilePicture;
-const updateUserprofile = (userId, profileData) => {
+const updateUserProfile = (userId, profileData) => {
     return new Promise((resolve, reject) => {
         const query = `
         UPDATE users
-        SET fname = ?,lname = ?, email = ?, phone_number = ?, address_line1 = ?, city = ?, state = ?, postal_code = ?, country = ?
+        SET fname = ?, 
+            lname = ?, 
+            email = ?, 
+            role = ?, 
+            phone_number = ?, 
+            address = ?, 
+            city = ?, 
+            state = ?, 
+            postal_code = ?, 
+            country = ?, 
+            company_id = ?, 
+            updated_at = ?
         WHERE user_id = ?;
     `;
+        // Format current date for MySQL DATETIME field
+        const now = new Date();
+        const formattedDate = (0, date_fns_1.format)(now, 'yyyy-MM-dd HH:mm:ss'); // Use date-fns to format as MySQL DATETIME
         const values = [
-            profileData.fname,
-            profileData.lname,
-            profileData.email,
-            profileData.phone_number,
-            profileData.address_line1,
-            profileData.city,
-            profileData.state,
-            profileData.postal_code,
-            profileData.country,
+            profileData.fname || null,
+            profileData.lname || null,
+            profileData.email || null,
+            profileData.role || null,
+            profileData.phone_number || null,
+            profileData.address || null,
+            profileData.city || null,
+            profileData.state || null,
+            profileData.postal_code || null,
+            profileData.country || null,
+            profileData.company_id || null,
+            formattedDate, // Properly formatted timestamp for `updated_at`
             userId
         ];
         connection_1.default.query(query, values, (err) => {
             if (err) {
-                console.log("Database error ", err);
-                reject(new Error("Database error, "));
+                console.log("Database error", err);
+                reject(new Error("Database error"));
             }
             else {
                 resolve();
@@ -117,4 +135,4 @@ const updateUserprofile = (userId, profileData) => {
         });
     });
 };
-exports.updateUserprofile = updateUserprofile;
+exports.updateUserProfile = updateUserProfile;

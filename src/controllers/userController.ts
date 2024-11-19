@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import { registerUser, changeUserRole, } from '../services/userService';
 import { upload } from '../middleware/multerconfig';
-import { getUser, getUserById, updateUserprofile, updateUserProfilePicture } from '../db/queries/userQueries';
+import { getUser, getUserById, updateUserProfile, updateUserProfilePicture } from '../db/queries/userQueries';
 
 //Get User 
 export const getProfileController = async (req: Request, res: Response) => {
@@ -97,25 +97,39 @@ export const uploadProfilePicture = async (req: Request, res: Response) => {
 
 export const editProfile = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.user_id);
-    const { fname, lname, email, phone_number, address_line1, city, state, postal_code, country } = req.body;
+    const { fname, lname, email, role, phone_number, address, city, state, postal_code, country } = req.body;
+
+    console.log("Incoming user ID:", userId);
+    console.log("Incoming profile data:", {
+        fname,
+        lname,
+        email,
+        role,
+        phone_number,
+        address,
+        city,
+        state,
+        postal_code,
+        country
+    });
+
     try {
-        await updateUserprofile(userId, {
+        await updateUserProfile(userId, {
             fname,
             lname,
             email,
+            role,
             phone_number,
-            address_line1,
+            address,
             city,
             state,
             postal_code,
             country
         });
         res.status(200).json({ message: "Profile updated successfully." });
-    }
-    catch (error) {
+    } catch (error) {
         console.log("Error updating profile", error);
         res.status(500).json({ message: 'Failed to update profile.' });
     }
+};
 
-
-}

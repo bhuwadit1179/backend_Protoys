@@ -16,7 +16,7 @@ router.get('/profile', authMiddleware, getProfileController); //get profile
 router.post('/register', registerUserController); //register
 router.put('/user/:user_id/role', authMiddleware, updateUserRoleController); //update role
 router.post('/user/:user_id/profile-picture', authMiddleware, upload.single('profile_pictures'), uploadProfilePicture); // upload profile picture
-router.put('/user/:user_id/profile', authMiddleware, editProfile); //edit profile
+router.put('/user/editprofile/:user_id', authMiddleware, editProfile); //edit profile
 
 
 export default router;

@@ -1,6 +1,8 @@
 // src/db/queries/userQueries.ts
 import connection from '../connection';
 import { User } from '../model/userModel';
+import { format } from 'date-fns';
+
 export const getUser = (): Promise<User | null> => {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM users';
@@ -92,33 +94,53 @@ export const updateUserProfilePicture = (userId: number, profilePictureUrl: stri
     });
 };
 
-export const updateUserprofile = (userId: number, profileData: any): Promise<void> => {
+
+export const updateUserProfile = (userId: number, profileData: any): Promise<void> => {
     return new Promise((resolve, reject) => {
         const query = `
         UPDATE users
-        SET fname = ?,lname = ?, email = ?, phone_number = ?, address_line1 = ?, city = ?, state = ?, postal_code = ?, country = ?
+        SET fname = ?, 
+            lname = ?, 
+            email = ?, 
+            role = ?, 
+            phone_number = ?, 
+            address = ?, 
+            city = ?, 
+            state = ?, 
+            postal_code = ?, 
+            country = ?, 
+            company_id = ?, 
+            updated_at = ?
         WHERE user_id = ?;
     `;
+
+        // Format current date for MySQL DATETIME field
+        const now = new Date();
+        const formattedDate = format(now, 'yyyy-MM-dd HH:mm:ss'); // Use date-fns to format as MySQL DATETIME
+
         const values = [
-            profileData.fname,
-            profileData.lname,
-            profileData.email,
-            profileData.phone_number,
-            profileData.address_line1,
-            profileData.city,
-            profileData.state,
-            profileData.postal_code,
-            profileData.country,
+            profileData.fname || null,
+            profileData.lname || null,
+            profileData.email || null,
+            profileData.role || null,
+            profileData.phone_number || null,
+            profileData.address || null,
+            profileData.city || null,
+            profileData.state || null,
+            profileData.postal_code || null,
+            profileData.country || null,
+            profileData.company_id || null,
+            formattedDate, // Properly formatted timestamp for `updated_at`
             userId
-        ]
+        ];
+
         connection.query(query, values, (err) => {
             if (err) {
-                console.log("Database error ", err);
-                reject(new Error("Database error, "))
+                console.log("Database error", err);
+                reject(new Error("Database error"));
+            } else {
+                resolve();
             }
-            else {
-                resolve()
-            }
-        })
-    })
-}
+        });
+    });
+};
