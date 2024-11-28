@@ -144,3 +144,14 @@ export const updateUserProfile = (userId: number, profileData: any): Promise<voi
         });
     });
 };
+
+
+export const deleteUserById = (userId: number): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        const query = 'DELETE FROM users WHERE user_id = ?';
+        connection.query(query, [userId], (error) => {
+            if (error) return reject(error);
+            resolve();
+        });
+    });
+}

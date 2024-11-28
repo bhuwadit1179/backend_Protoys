@@ -98,21 +98,6 @@ export const uploadProfilePicture = async (req: Request, res: Response) => {
 export const editProfile = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.user_id);
     const { fname, lname, email, role, phone_number, address, city, state, postal_code, country } = req.body;
-
-    console.log("Incoming user ID:", userId);
-    console.log("Incoming profile data:", {
-        fname,
-        lname,
-        email,
-        role,
-        phone_number,
-        address,
-        city,
-        state,
-        postal_code,
-        country
-    });
-
     try {
         await updateUserProfile(userId, {
             fname,

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserProfile = exports.updateUserProfilePicture = exports.updateUserRoleById = exports.insertUser = exports.getUserById = exports.getUserByEmail = exports.getUser = void 0;
+exports.deleteUserById = exports.updateUserProfile = exports.updateUserProfilePicture = exports.updateUserRoleById = exports.insertUser = exports.getUserById = exports.getUserByEmail = exports.getUser = void 0;
 // src/db/queries/userQueries.ts
 const connection_1 = __importDefault(require("../connection"));
 const date_fns_1 = require("date-fns");
@@ -136,3 +136,14 @@ const updateUserProfile = (userId, profileData) => {
     });
 };
 exports.updateUserProfile = updateUserProfile;
+const deleteUserById = (userId) => {
+    return new Promise((resolve, reject) => {
+        const query = 'DELETE FROM users WHERE user_id = ?';
+        connection_1.default.query(query, [userId], (error) => {
+            if (error)
+                return reject(error);
+            resolve();
+        });
+    });
+};
+exports.deleteUserById = deleteUserById;

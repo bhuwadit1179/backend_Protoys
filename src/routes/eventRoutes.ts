@@ -1,15 +1,18 @@
-// // src/route/route.ts
-// import express from 'express';
-// import {
-//     getAllEventsController
-// } from '../controllers/eventController';
+// src/route/route.ts
+import express from 'express';
+import {
+    createEventController,
+    deleteEventController,
+    updateEventControllerById
+} from '../controllers/eventController';
+import { authMiddleware } from '../middleware/authmiddleware';
 
-// const router = express.Router();
+const router = express.Router();
 
-// // Define routes
-// router.get('/events', getAllEvents);
-// router.post('/events', createEvent);
+// Define routes
+router.put('/events/:event_id', authMiddleware, updateEventControllerById);
+router.post('/events', authMiddleware, createEventController);
 // router.put('/events/:id', updateEvent);
-// router.delete('/events/:id', deleteEvent);
+router.delete('/events/:event_id', authMiddleware, deleteEventController);
 
-// export default router;
+export default router;

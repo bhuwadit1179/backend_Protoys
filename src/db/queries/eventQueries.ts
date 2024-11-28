@@ -1,35 +1,39 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEvent = exports.updateEventById = exports.insertEvent = exports.getEventById = exports.getEvent = void 0;
-const connection_1 = __importDefault(require("../connection"));
-const getEvent = () => {
+import connection from '../connection';
+import { Event } from '../model/eventModel';
+
+
+const getEvent = (): Promise<Event | null> => {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM events';
-        connection_1.default.query(query, (error, results) => {
-            if (error)
-                return reject(error);
+        connection.query(query, (error, results) => {
+            if (error) return reject(error);
             resolve(results || null);
         });
     });
-};
-exports.getEvent = getEvent;
-const getEventById = (event_id) => {
+}
+const getEventById = (event_id: number): Promise<Event | null> => {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM events WHERE event_id = ?';
-        connection_1.default.query(query, [event_id], (error, results) => {
-            if (error)
-                return reject(error);
+        connection.query(query, [event_id], (error, results) => {
+            if (error) return reject(error);
             resolve(results[0] || null);
         });
     });
-};
-exports.getEventById = getEventById;
-const insertEvent = (eventData) => {
+}
+
+const insertEvent = (eventData: Event): Promise<void> => {
     return new Promise((resolve, reject) => {
-        const { event_name, description, location, start_date, end_date, created_by, event_type, event_code, } = eventData;
+        const {
+            event_name,
+            description,
+            location,
+            start_date,
+            end_date,
+            created_by,
+            event_type,
+            event_code,
+        } = eventData;
+
         const query = `
             INSERT INTO events (
             event_name,
@@ -42,7 +46,7 @@ const insertEvent = (eventData) => {
             event_code
             ) VALUES ( ?, ?, ?, ?,  ?, ?, ?, ?)
         `;
-        connection_1.default.query(query, [
+        connection.query(query, [
             event_name,
             description || null,
             location || null,
@@ -52,14 +56,14 @@ const insertEvent = (eventData) => {
             event_type,
             event_code,
         ], (error) => {
-            if (error)
-                return reject(error);
+            if (error) return reject(error);
             resolve();
         });
-    });
-};
-exports.insertEvent = insertEvent;
-const updateEventById = (eventId, eventData) => {
+    }
+    )
+}
+
+const updateEventById = (eventId: number, eventData: any): Promise<void> => {
     return new Promise((resolve, reject) => {
         const query = `
             UPDATE events SET
@@ -80,29 +84,32 @@ const updateEventById = (eventId, eventData) => {
             eventData.event_type,
             eventId
         ];
-        connection_1.default.query(query, values, (error, results) => {
-            if (error)
-                return reject(error);
+
+        connection.query(query, values, (error, results) => {
+            if (error) return reject(error);
+
             // Check affectedRows to verify if a row was updated
             if (results.affectedRows === 0) {
                 return reject(new Error(`Event with ID ${eventId} does not exist.`));
             }
+
             resolve();
         });
     });
 };
-exports.updateEventById = updateEventById;
-const deleteEvent = (eventId) => {
+
+
+const deleteEvent = (eventId: number): Promise<void> => {
     return new Promise((resolve, reject) => {
         const query = 'DELETE FROM events WHERE event_id = ?';
-        connection_1.default.query(query, [eventId], (error, results) => {
-            if (error)
-                return reject(error);
+        connection.query(query, [eventId], (error, results) => {
+            if (error) return reject(error);
             if (results.affectedRows === 0) {
                 return reject(new Error(`Event with ID ${eventId} does not exist.`));
             }
             resolve();
         });
     });
-};
-exports.deleteEvent = deleteEvent;
+}
+
+export { getEvent, getEventById, insertEvent, updateEventById, deleteEvent };

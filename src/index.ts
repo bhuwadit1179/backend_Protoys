@@ -3,6 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
+import eventRoutes from './routes/eventRoutes';
 import path from 'path';
 import cors from 'cors';
 const corsOptions = {
@@ -19,7 +20,10 @@ const PORT = process.env.PORT || 3000;
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
-app.use('/', userRoutes);
+app.use('/', eventRoutes, userRoutes);
+
+
+
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.listen(PORT, () => {

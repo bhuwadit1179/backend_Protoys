@@ -113,19 +113,6 @@ exports.uploadProfilePicture = uploadProfilePicture;
 const editProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = parseInt(req.params.user_id);
     const { fname, lname, email, role, phone_number, address, city, state, postal_code, country } = req.body;
-    console.log("Incoming user ID:", userId);
-    console.log("Incoming profile data:", {
-        fname,
-        lname,
-        email,
-        role,
-        phone_number,
-        address,
-        city,
-        state,
-        postal_code,
-        country
-    });
     try {
         yield (0, userQueries_1.updateUserProfile)(userId, {
             fname,
