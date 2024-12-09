@@ -32,25 +32,3 @@ export const authenticateUser = async (email: string, password: string): Promise
     const isPasswordValid = await bcrypt.compare(password, user.password);
     return isPasswordValid ? user : null;
 };
-
-import { Request, Response } from 'express';
-
-export const getProfile = async (req: Request, res: Response): Promise<void> => {
-    // Access user ID directly from `req.user`
-    const userId = req.user?.user_id;
-
-    if (userId === undefined) {
-        res.status(400).json({ message: 'User ID not found in request.' });
-        return
-    }
-    try {
-        const user = await getUserById(userId);
-        res.status(200).json({ user });
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ message: error.message });
-        } else {
-            res.status(500).json({ message: 'An unknown error occurred.' });
-        }
-    }
-}

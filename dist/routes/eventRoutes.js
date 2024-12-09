@@ -11,6 +11,7 @@ const router = express_1.default.Router();
 // Define routes
 router.put('/events/:event_id', authmiddleware_1.authMiddleware, eventController_1.updateEventControllerById);
 router.post('/events', authmiddleware_1.authMiddleware, eventController_1.createEventController);
-// router.put('/events/:id', updateEvent);
+router.get('/events', authmiddleware_1.authMiddleware, eventController_1.getAllEventController);
+router.get('/events/:id', authmiddleware_1.authMiddleware, eventController_1.getEventByIdController);
 router.delete('/events/:event_id', authmiddleware_1.authMiddleware, eventController_1.deleteEventController);
 exports.default = router;

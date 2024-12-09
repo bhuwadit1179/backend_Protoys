@@ -20,7 +20,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEventService = exports.updateEventService = exports.getEventUseId = exports.createEventService = void 0;
+exports.updateEventService = exports.createEventService = void 0;
 const eventQueries_1 = require("../db/queries/eventQueries");
 // create event
 const createEventService = (eventData) => __awaiter(void 0, void 0, void 0, function* () {
@@ -36,28 +36,6 @@ const createEventService = (eventData) => __awaiter(void 0, void 0, void 0, func
     yield (0, eventQueries_1.insertEvent)(eventData);
 });
 exports.createEventService = createEventService;
-// get event
-const getEventUseId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const eventId = (_a = req.event) === null || _a === void 0 ? void 0 : _a.event_id;
-    if (eventId === undefined) {
-        res.status(400).json({ message: 'Event ID not found in request.' });
-        return;
-    }
-    try {
-        const event = yield (0, eventQueries_1.getEventById)(eventId);
-        res.status(200).json({ event });
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ message: error.message });
-        }
-        else {
-            res.status(500).json({ message: 'An unknown error occurred.' });
-        }
-    }
-});
-exports.getEventUseId = getEventUseId;
 const updateEventService = (eventId, eventData) => __awaiter(void 0, void 0, void 0, function* () {
     if (!eventId || typeof eventId !== 'number') {
         throw new Error('Invalid event ID');
@@ -83,27 +61,3 @@ const updateEventService = (eventId, eventData) => __awaiter(void 0, void 0, voi
     }
 });
 exports.updateEventService = updateEventService;
-// delete event
-const deleteEventService = (eventId) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(eventId);
-    if (!eventId || typeof eventId !== 'number') {
-        throw new Error('Invalid event ID');
-    }
-    try {
-        // Call the query to delete the event from the database
-        yield (0, eventQueries_1.deleteEvent)(eventId);
-        console.log(`Event with ID ${eventId} has been successfully deleted.`);
-    }
-    catch (error) {
-        // Narrow the type of error
-        if (error instanceof Error) {
-            console.error(`Failed to delete event with ID ${eventId}:`, error.message);
-            throw error;
-        }
-        else {
-            console.error(`Failed to delete event with ID ${eventId}:`, error);
-            throw new Error('An unknown error occurred');
-        }
-    }
-});
-exports.deleteEventService = deleteEventService;

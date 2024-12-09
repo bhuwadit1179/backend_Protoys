@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProfile = exports.authenticateUser = exports.changeUserRole = exports.registerUser = void 0;
+exports.authenticateUser = exports.changeUserRole = exports.registerUser = void 0;
 // src/services/userService.ts
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const userQueries_1 = require("../db/queries/userQueries");
@@ -54,25 +54,3 @@ const authenticateUser = (email, password) => __awaiter(void 0, void 0, void 0, 
     return isPasswordValid ? user : null;
 });
 exports.authenticateUser = authenticateUser;
-const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    // Access user ID directly from `req.user`
-    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.user_id;
-    if (userId === undefined) {
-        res.status(400).json({ message: 'User ID not found in request.' });
-        return;
-    }
-    try {
-        const user = yield (0, userQueries_1.getUserById)(userId);
-        res.status(200).json({ user });
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ message: error.message });
-        }
-        else {
-            res.status(500).json({ message: 'An unknown error occurred.' });
-        }
-    }
-});
-exports.getProfile = getProfile;
